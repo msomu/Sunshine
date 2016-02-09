@@ -29,6 +29,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.msomu.sunshine.MainActivity" />
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/activity_settings">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.msomu.sunshine.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
