@@ -19,7 +19,7 @@ import android.widget.TextView;
  */
 public class DetailActivityFragment extends Fragment {
 
-    private static final String FORECAST_SHARE_HASHTAG = " #MyLearningApp";
+    private static final String FORECAST_SHARE_HASHTAG = " #AndroidAppLearning";
     private String mForecastStr;
 
     public DetailActivityFragment() {
