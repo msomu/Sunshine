@@ -18,6 +18,7 @@ package com.msomu.sunshine.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.msomu.sunshine.data.WeatherContract.LocationEntry;
 import com.msomu.sunshine.data.WeatherContract.WeatherEntry;
@@ -27,10 +28,10 @@ import com.msomu.sunshine.data.WeatherContract.WeatherEntry;
  */
 public class WeatherDbHelper extends SQLiteOpenHelper {
 
+    static final String DATABASE_NAME = "weather.db";
+    private static final String TAG = "WeatherDbHelper";
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 1;
-
-    static final String DATABASE_NAME = "weather.db";
 
     public WeatherDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -78,7 +79,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 // per location, it's created a UNIQUE constraint with REPLACE strategy
                 " UNIQUE (" + WeatherEntry.COLUMN_DATE + ", " +
                 WeatherEntry.COLUMN_LOC_KEY + ") ON CONFLICT REPLACE);";
-
+        Log.d(TAG, SQL_CREATE_LOCATION_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_LOCATION_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_WEATHER_TABLE);
     }
