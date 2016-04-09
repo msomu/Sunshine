@@ -58,6 +58,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private int mPosition = ListView.INVALID_POSITION;
     private ListView mListView;
     private ForecastAdapter mForecastAdapter;
+    private boolean mUseTodayLayout;
 
     public ForecastFragment() {
     }
@@ -162,6 +163,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 //        Cursor cur = getActivity().getContentResolver().query(weatherForLocationUri,
 //                null, null, null, sortOrder);
         return new CursorLoader(getActivity(), weatherForLocationUri, FORECAST_COLUMNS, null, null, sortOrder);
+    }
+
+    public void setUseTodayLayout(boolean useTodayLayout) {
+        mUseTodayLayout = useTodayLayout;
+        if (mForecastAdapter != null) {
+            mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
+        }
     }
 
     @Override
