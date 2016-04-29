@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,6 +13,7 @@ import com.msomu.sunshine.sync.SunshineSyncAdapter;
 public class MainActivity extends AppCompatActivity implements ForecastFragment.Callback {
 
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    private static final String TAG = "MainActivity";
     private String mLocation;
     private boolean mTwoPane;
 
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         ForecastFragment forecastFragment = ((ForecastFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_forecast));
         forecastFragment.setUseTodayLayout(!mTwoPane);
-
+        Log.d(TAG, "intalize sync adapter");
         SunshineSyncAdapter.initializeSyncAdapter(this);
     }
 
