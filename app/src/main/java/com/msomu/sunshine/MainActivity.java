@@ -1,19 +1,27 @@
 package com.msomu.sunshine;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.msomu.sunshine.gcm.RegistrationIntentService;
 import com.msomu.sunshine.sync.SunshineSyncAdapter;
 
 public class MainActivity extends AppCompatActivity implements ForecastFragment.Callback {
 
+    public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "MainActivity";
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
     private String mLocation;
     private boolean mTwoPane;
 
@@ -44,6 +52,36 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         forecastFragment.setUseTodayLayout(!mTwoPane);
         Log.d(TAG, "intalize sync adapter");
         SunshineSyncAdapter.initializeSyncAdapter(this);
+        if (checkPlayServices()) {
+            // This is where we could either prompt a user that they should install
+            // the latest version of Google Play Services, or add an error snackbar
+            // that some features won't be available.
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(this);
+            boolean sentToken = sharedPreferences.getBoolean(SENT_TOKEN_TO_SERVER, false);
+            if (!sentToken) {
+                Log.d(TAG, "gcm not there");
+                Intent intent = new Intent(this, RegistrationIntentService.class);
+                startService(intent);
+            }
+        }
+    }
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(LOG_TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        Log.d(TAG, "play service available");
+        return true;
     }
 
     @Override
